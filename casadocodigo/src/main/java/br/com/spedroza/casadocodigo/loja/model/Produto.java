@@ -1,15 +1,37 @@
 package br.com.spedroza.casadocodigo.loja.model;
 
-public class Produto {
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
+public class Produto{
 
 	//attibutes
-	private String titulo, descricao;
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private int id;
+	
+	private String titulo;
+	private String descricao;
 	private int paginas;
 	
 	//methods
+	
 	public String getTitulo() {
 		return titulo;
 	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public void setTitulo(String titulo) {
 		this.titulo = titulo;
 	}
@@ -25,10 +47,12 @@ public class Produto {
 	public void setPaginas(int paginas) {
 		this.paginas = paginas;
 	}
+
 	@Override
 	public String toString() {
-		return "Produto [titulo=" + titulo + ", descricao=" + descricao + ", paginas=" + paginas + "]";
+		return "Produto [id=" + id + ", titulo=" + titulo + ", descricao=" + descricao + ", paginas=" + paginas + "]";
 	}
+
 	
 	
 	
