@@ -1,0 +1,7 @@
+br\com\spedroza\casadocodigo\loja\controller\ProdutoController.class
+br\com\spedroza\casadocodigo\loja\controller\HomeController.class
+br\com\spedroza\casadocodigo\loja\conf\JPAConfiguration.class
+br\com\spedroza\casadocodigo\loja\model\Produto.class
+br\com\spedroza\casadocodigo\loja\conf\AppWebConfiguration.class
+br\com\spedroza\casadocodigo\loja\conf\ServletSpringMVC.class
+br\com\spedroza\casadocodigo\loja\dao\ProdutoDAO.class
