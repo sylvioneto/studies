@@ -1,6 +1,9 @@
 package br.com.spedroza.casadocodigo.loja.model;
 
 
+import java.util.List;
+
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,8 +21,10 @@ public class Produto{
 	private String descricao;
 	private int paginas;
 	
-	//methods
+	@ElementCollection //this annotation creates a new table for the precos linked to the product
+	private List<Preco> precos; //price list for this product
 	
+	//methods
 	public String getTitulo() {
 		return titulo;
 	}
@@ -46,6 +51,14 @@ public class Produto{
 	}
 	public void setPaginas(int paginas) {
 		this.paginas = paginas;
+	}
+	
+	public List<Preco> getPrecos() {
+		return precos;
+	}
+
+	public void setPrecos(List<Preco> precos) {
+		this.precos = precos;
 	}
 
 	@Override
