@@ -1,5 +1,7 @@
 package br.com.spedroza.casadocodigo.loja.dao;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
@@ -17,6 +19,13 @@ public class ProdutoDAO {
 	private EntityManager manager;
 	
 	public void insert(Produto produto){
+		System.out.println("Inside "+this.getClass().getName());
 		manager.persist(produto);
+	}
+
+	public List<Produto> getAll() {
+		System.out.println("Inside "+this.getClass().getName());
+		System.out.println("Querying produtos... ");
+		return manager.createQuery("select p from Produto p", Produto.class).getResultList();
 	}
 }
