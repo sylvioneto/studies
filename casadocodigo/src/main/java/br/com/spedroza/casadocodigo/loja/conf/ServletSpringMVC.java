@@ -1,6 +1,8 @@
 package br.com.spedroza.casadocodigo.loja.conf;
 
 import javax.servlet.Filter;
+import javax.servlet.MultipartConfigElement;
+import javax.servlet.ServletRegistration.Dynamic;
 
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
@@ -33,4 +35,9 @@ public class ServletSpringMVC extends AbstractAnnotationConfigDispatcherServletI
 		return new Filter[]{encodingFilter};
 	}
 	
+	@Override
+	protected void customizeRegistration(Dynamic registration) {
+		System.out.println("Setting customizeRegistration...");
+		registration.setMultipartConfig(new MultipartConfigElement(""));
+	}
 }
