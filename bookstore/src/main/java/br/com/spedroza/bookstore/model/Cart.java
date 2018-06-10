@@ -65,4 +65,8 @@ public class Cart implements Serializable{
 		items.remove(new CartItem(product, priceType));
 	}
 	
+	public void clear() {
+		items.clear();
+	}
+	
 }
