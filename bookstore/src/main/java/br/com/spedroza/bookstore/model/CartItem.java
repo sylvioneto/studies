@@ -1,9 +1,15 @@
 package br.com.spedroza.bookstore.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class CartItem {
+public class CartItem implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private Product product;
 	private PriceType priceType;
 

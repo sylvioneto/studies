@@ -21,7 +21,7 @@ th, td {
 <body>
 	<h2>List of Products</h2>
 	<p>${success}</p>
-	
+	<p>${fail}</p>
 	<p><a href="<c:url value="/cart"/>">Your cart (${cart.quantity})</a></p>
 
 	<table style="width:80%">
