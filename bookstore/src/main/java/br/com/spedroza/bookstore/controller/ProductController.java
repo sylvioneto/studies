@@ -5,6 +5,8 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -51,6 +54,7 @@ public class ProductController {
 	}
 	
 	@RequestMapping(method=RequestMethod.POST)
+	@CacheEvict(value="productList", allEntries=true) 
 	public ModelAndView save(MultipartFile summary, @Valid Product product, BindingResult result, RedirectAttributes redirectAttributes){
 		// Valid annotation send the Product object to validation
 		// MultipartFile is used to received the file		
@@ -80,6 +84,7 @@ public class ProductController {
 	}
 	
 	@RequestMapping(method=RequestMethod.GET)
+	@Cacheable(value="productList")
 	public ModelAndView getProducts(){
 		System.out.println("Inside ProductController.getProducts");
 		ModelAndView modelAndView = new ModelAndView("/product/list");
@@ -97,5 +102,13 @@ public class ProductController {
 		System.out.println("Setting product...");
 		modelAndView.addObject("product", product);
 		return modelAndView;
+	}
+	
+	// this is a rest api to return a product in json format
+	@RequestMapping("/{id}")
+	@ResponseBody // spring will return the body
+	public Product getProductJson(@PathVariable("id") int id){
+		System.out.println("Inside ProductController.getProductJson");
+		return pdao.getById(id);
 	}
 }

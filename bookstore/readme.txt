@@ -1,4 +1,4 @@
-Bookstore project using Spring MVC and Hibernate
+Bookstore project built in Java, Spring MVC, Hibernate and Bootstrap.
 
 Create a database in MYSQL named BOOKSTORE.
 Hibernate will create all tables in the first application start.

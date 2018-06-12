@@ -19,18 +19,18 @@ public class ProdutoDAO {
 	private EntityManager manager;
 	
 	public void insert(Produto produto){
-		System.out.println("Inside "+this.getClass().getName());
+		System.out.println("Inside ProdutoDAO.insert...");
 		manager.persist(produto);
 	}
 
 	public List<Produto> getAll() {
-		System.out.println("Inside "+this.getClass().getName());
+		System.out.println("Inside ProdutoDAO.getAll...");
 		System.out.println("Querying produtos... ");
 		return manager.createQuery("select p from Produto p", Produto.class).getResultList();
 	}
 
 	public Produto getById(int id) {
-		//return manager.find(Produto.class, id);
+		System.out.println("Inside ProdutoDAO.getById...");
 		return manager.createQuery("select distinct(p) from Produto p left join fetch p.precos precos where p.id = :id", Produto.class).setParameter("id", id).getSingleResult();
 	}
 }

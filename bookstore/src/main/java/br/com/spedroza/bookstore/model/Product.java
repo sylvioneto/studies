@@ -126,6 +126,4 @@ public class Product{
 		return prices.stream().filter(amount -> amount.getpType().equals(priceType)).findFirst().get().getAmount();
 	}	
 	
-	
-	
 }

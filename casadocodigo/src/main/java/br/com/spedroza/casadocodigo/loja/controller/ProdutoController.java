@@ -5,6 +5,8 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -24,6 +26,7 @@ import br.com.spedroza.casadocodigo.loja.validation.ProdutoValidation;
 
 @Controller
 @RequestMapping("/produtos")
+@Cacheable
 public class ProdutoController {
 
 	// this annotation is to spring inject product dao here
@@ -51,6 +54,7 @@ public class ProdutoController {
 	}
 	
 	@RequestMapping(method=RequestMethod.POST)
+	@CacheEvict(value="produtosHome", allEntries=true) 
 	public ModelAndView gravar(MultipartFile sumario, @Valid Produto produto, BindingResult result, RedirectAttributes redirectAttributes){
 		// Valid annotation send the Product object to validation
 		// MultipartFile is used to received the file		
@@ -62,7 +66,6 @@ public class ProdutoController {
 			String path = fileSaver.write("upload-dir", sumario);
 			produto.setSumarioPath(path);	
 		}
-		
 		
 		// check problems
 		  if (result.hasErrors()) {

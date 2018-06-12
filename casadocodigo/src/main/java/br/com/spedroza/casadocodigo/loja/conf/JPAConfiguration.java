@@ -18,7 +18,7 @@ public class JPAConfiguration {
 
 	@Bean
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory(){
-		System.out.println("Getting entityManagerFactory...");
+		System.out.println("Inside JPAConfiguration.entityManagerFactory...");
 		LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
 		
 		JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
@@ -46,7 +46,7 @@ public class JPAConfiguration {
 	
 	@Bean
 	public JpaTransactionManager transactionManager(EntityManagerFactory entityManagerFac){
-		System.out.println("Getting transactionManager...");
+		System.out.println("Inside JPAConfiguration.transactionManager...");
 		return new JpaTransactionManager(entityManagerFac);
 	}
 }

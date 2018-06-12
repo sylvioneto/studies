@@ -16,7 +16,7 @@ public class ServletSpringMVC extends AbstractAnnotationConfigDispatcherServletI
 
 	@Override
 	protected Class<?>[] getServletConfigClasses() {
-		System.out.println("Setting configuration classes...");
+		System.out.println("Inside JPAConfiguration.getServletConfigClasses...");
 		return new Class[]{AppWebConfiguration.class, JPAConfiguration.class};
 	}
 
@@ -28,6 +28,7 @@ public class ServletSpringMVC extends AbstractAnnotationConfigDispatcherServletI
 	// filter to set UTF-8
 	@Override
 	protected Filter[] getServletFilters() {
+		System.out.println("Inside JPAConfiguration.getServletFilters...");
 		System.out.println("Setting Servlet Filters...");
 		CharacterEncodingFilter encodingFilter = new CharacterEncodingFilter();
 		System.out.println("Setting characterset UTF-8...");
@@ -37,7 +38,7 @@ public class ServletSpringMVC extends AbstractAnnotationConfigDispatcherServletI
 	
 	@Override
 	protected void customizeRegistration(Dynamic registration) {
-		System.out.println("Setting customizeRegistration...");
+		System.out.println("Inside JPAConfiguration.customizeRegistration...");
 		registration.setMultipartConfig(new MultipartConfigElement(""));
 	}
 }

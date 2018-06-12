@@ -1,5 +1,10 @@
 package br.com.spedroza.casadocodigo.loja.conf;
 
+import java.util.concurrent.TimeUnit;
+
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.guava.GuavaCacheManager;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -13,12 +18,15 @@ import org.springframework.web.multipart.support.StandardServletMultipartResolve
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+import com.google.common.cache.CacheBuilder;
+
 import br.com.spedroza.casadocodigo.loja.controller.HomeController;
 import br.com.spedroza.casadocodigo.loja.dao.ProdutoDAO;
 import br.com.spedroza.casadocodigo.loja.infra.FileSaver;
 import br.com.spedroza.casadocodigo.loja.model.CarrinhoCompras;
 
 @EnableWebMvc
+@EnableCaching //enable cache
 @ComponentScan(basePackageClasses = { HomeController.class, ProdutoDAO.class , FileSaver.class, CarrinhoCompras.class})
 public class AppWebConfiguration {
 
@@ -57,7 +65,18 @@ public class AppWebConfiguration {
 	
 	@Bean
 	public MultipartResolver multipartResolver() {
+		System.out.println("Inside AppWebConfiguration.multipartResolver");
 		return new StandardServletMultipartResolver();
 	}
-	
+
+	@Bean
+	public CacheManager cacheManager() {
+		System.out.println("Inside AppWebConfiguration.cacheManager");
+		//return new ConcurrentMapCacheManager(); //basic cache only for tests
+		CacheBuilder<Object, Object> cacheBuilder = CacheBuilder.newBuilder().maximumSize(100).expireAfterAccess(5, TimeUnit.MINUTES);
+		GuavaCacheManager manager = new GuavaCacheManager();
+		manager.setCacheBuilder(cacheBuilder);
+		return null;
+		
+	}
 }
