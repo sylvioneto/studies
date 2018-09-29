@@ -1,4 +1,4 @@
-package jms;
+package br.com.spedroza.jms.queue;
 
 import java.util.Enumeration;
 
