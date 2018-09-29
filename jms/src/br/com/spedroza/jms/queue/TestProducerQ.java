@@ -10,6 +10,9 @@ import javax.jms.Session;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import br.com.spedroza.jms.model.FundTransfer;
+import br.com.spedroza.jms.model.FundTransferFactory;
+
 /*
  * This class will connect to ActiveMQ and consume a destination named fila.financeiro
  * 
@@ -18,6 +21,7 @@ public class TestProducerQ {
 
 	public static void main(String[] args) throws NamingException, JMSException {
 		System.out.println("Inside TestProducerQ...");
+		System.setProperty("org.apache.activemq.SERIALIZABLE_PACKAGES","*");
 		// create a context. it will read from jndi.properties
 		InitialContext context = new InitialContext();
 
@@ -36,12 +40,15 @@ public class TestProducerQ {
 		Session session = con.createSession(false, Session.AUTO_ACKNOWLEDGE);
 		
 		// destination is the queue or topic. its name is defined in the jndi.properties
-		System.out.println("Lookup for queue...");
+		System.out.println("Lookup for QUEUE...");
 		Destination destQ = (Destination) context.lookup("financeiro");
 		
 		// producer to SEND the message to the queue
 		MessageProducer producer = session.createProducer(destQ);
 		
+		
+		//Itinerator to post text messages
+		/*
 		for (int i = 0; i < 100; i++) {
 			// create a message
 			Message msg = session.createTextMessage("<msg><id>"+i+"</id></msg>");
@@ -50,6 +57,16 @@ public class TestProducerQ {
 			System.out.println("Sending message..."+i);
 			producer.send(msg);			
 		}
+		*/
+		
+
+		// Posting objects messages
+		FundTransfer ft = new FundTransferFactory().getMockFundTransfer();
+		Message msg = session.createObjectMessage(ft);
+		msg.setBooleanProperty("ebook", false);
+		System.out.println("Sending message..."+ft.toString());
+		producer.send(msg);	
+		
 		
 		// close the open objects
 		session.close();

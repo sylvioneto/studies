@@ -10,6 +10,9 @@ import javax.jms.Session;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import br.com.spedroza.jms.model.FundTransfer;
+import br.com.spedroza.jms.model.FundTransferFactory;
+
 /*
  * This class will connect to ActiveMQ and consume a destination named fila.financeiro
  * 
@@ -37,15 +40,17 @@ public class TestProducerT {
 		Session session = con.createSession(false, Session.AUTO_ACKNOWLEDGE);
 		
 		// destination is the queue or topic. its name is defined in the jndi.properties
-		System.out.println("Lookup for topic...");
+		System.out.println("Lookup for TOPIC...");
 		Destination destT = (Destination) context.lookup("loja");
 		
 		// producer to SEND the message to the queue
 		MessageProducer producer = session.createProducer(destT);
 		
+		//Itinerator to post text messages
 		for (int i = 0; i < 10; i++) {
-			// create a message
+			// create a message with property
 			Message msg = session.createTextMessage("<msg><id>"+i+"</id></msg>");
+			msg.setBooleanProperty("ebook", false);
 
 			//send the message
 			System.out.println("Sending message..."+i);
