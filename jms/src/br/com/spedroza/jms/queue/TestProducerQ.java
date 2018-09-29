@@ -1,15 +1,12 @@
 package br.com.spedroza.jms.queue;
 
-import java.util.Enumeration;
-
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
 import javax.jms.JMSException;
-import javax.jms.Queue;
-import javax.jms.QueueBrowser;
+import javax.jms.Message;
+import javax.jms.MessageProducer;
 import javax.jms.Session;
-import javax.jms.TextMessage;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
@@ -17,41 +14,48 @@ import javax.naming.NamingException;
  * This class will connect to ActiveMQ and consume a destination named fila.financeiro
  * 
  */
-public class TestQueueBrowser {
+public class TestProducerQ {
 
 	public static void main(String[] args) throws NamingException, JMSException {
-		
+		System.out.println("Inside TestProducerQ...");
 		// create a context. it will read from jndi.properties
 		InitialContext context = new InitialContext();
 
-		// create a connection factory
+		// create a connection
 		ConnectionFactory cf = (ConnectionFactory)context.lookup("ConnectionFactory");
 		
 		// create a connection
+		System.out.println("Creating connection...");
 		Connection con = cf.createConnection();
 		
 		// start the connection to the mom
 		con.start();
 		
 		// create a session. it handles ack and transaction
+		System.out.println("Creating session...");
 		Session session = con.createSession(false, Session.AUTO_ACKNOWLEDGE);
 		
-		// destination is where the messages are. the jndi name is defined in the jndi.properties
+		// destination is the queue or topic. its name is defined in the jndi.properties
+		System.out.println("Lookup for queue...");
 		Destination destQ = (Destination) context.lookup("financeiro");
 		
-		// queue browser will look at the messages without removing them from the queue
-		QueueBrowser browser = session.createBrowser((Queue) destQ);
+		// producer to SEND the message to the queue
+		MessageProducer producer = session.createProducer(destQ);
 		
-		Enumeration msgs = browser.getEnumeration();
-		while (msgs.hasMoreElements()) { 
-		    TextMessage msg = (TextMessage) msgs.nextElement(); 
-		    System.out.println("Message: " + msg.getText()); 
+		for (int i = 0; i < 100; i++) {
+			// create a message
+			Message msg = session.createTextMessage("<msg><id>"+i+"</id></msg>");
+
+			//send the message
+			System.out.println("Sending message..."+i);
+			producer.send(msg);			
 		}
 		
 		// close the open objects
 		session.close();
 		con.close();    
 		context.close();
+		System.out.println("End of TestProducerQ...");
 	}
 
 }

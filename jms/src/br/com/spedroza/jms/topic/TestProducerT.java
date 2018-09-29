@@ -1,4 +1,4 @@
-package br.com.spedroza.jms.queue;
+package br.com.spedroza.jms.topic;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
@@ -14,14 +14,15 @@ import javax.naming.NamingException;
  * This class will connect to ActiveMQ and consume a destination named fila.financeiro
  * 
  */
-public class TestProducer {
+public class TestProducerT {
 
 	public static void main(String[] args) throws NamingException, JMSException {
-		System.out.println("Inside TestProducer...");
-		// create a context. it will read from jndi.properties
+		System.out.println("Inside TestProducerT...");
+		
+		// create a initial context for lookup. it will read from jndi.properties
 		InitialContext context = new InitialContext();
 
-		// create a connection factory and a connection to the mom
+		// create a connection factory
 		ConnectionFactory cf = (ConnectionFactory)context.lookup("ConnectionFactory");
 		
 		// create a connection
@@ -35,13 +36,14 @@ public class TestProducer {
 		System.out.println("Creating session...");
 		Session session = con.createSession(false, Session.AUTO_ACKNOWLEDGE);
 		
-		// destination is where the messages are. the jndi name is defined in the jndi.properties
-		Destination destQ = (Destination) context.lookup("financeiro");
+		// destination is the queue or topic. its name is defined in the jndi.properties
+		System.out.println("Lookup for topic...");
+		Destination destT = (Destination) context.lookup("loja");
 		
 		// producer to SEND the message to the queue
-		MessageProducer producer = session.createProducer(destQ);
+		MessageProducer producer = session.createProducer(destT);
 		
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 10; i++) {
 			// create a message
 			Message msg = session.createTextMessage("<msg><id>"+i+"</id></msg>");
 
@@ -54,7 +56,7 @@ public class TestProducer {
 		session.close();
 		con.close();    
 		context.close();
-		System.out.println("End of TestProducer...");
+		System.out.println("End of TestProducerT...");
 	}
 
 }
