@@ -1,16 +1,12 @@
 package jms;
 
-import java.util.Scanner;
-
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
-import javax.jms.MessageConsumer;
-import javax.jms.MessageListener;
+import javax.jms.MessageProducer;
 import javax.jms.Session;
-import javax.jms.TextMessage;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
@@ -18,10 +14,10 @@ import javax.naming.NamingException;
  * This class will connect to ActiveMQ and consume a destination named fila.financeiro
  * 
  */
-public class TestConsumer {
+public class TestProducer {
 
 	public static void main(String[] args) throws NamingException, JMSException {
-		
+		System.out.println("Inside TestProducer...");
 		// create a context. it will read from jndi.properties
 		InitialContext context = new InitialContext();
 
@@ -29,46 +25,36 @@ public class TestConsumer {
 		ConnectionFactory cf = (ConnectionFactory)context.lookup("ConnectionFactory");
 		
 		// create a connection
+		System.out.println("Creating connection...");
 		Connection con = cf.createConnection();
 		
 		// start the connection to the mom
 		con.start();
 		
 		// create a session. it handles ack and transaction
+		System.out.println("Creating session...");
 		Session session = con.createSession(false, Session.AUTO_ACKNOWLEDGE);
 		
 		// destination is where the messages are. the jndi name is defined in the jndi.properties
-		Destination fila = (Destination) context.lookup("financeiro");
+		Destination destQ = (Destination) context.lookup("financeiro");
 		
-		// consumer to get the message from the queue
-		MessageConsumer consumer = session.createConsumer(fila);
+		// producer to SEND the message to the queue
+		MessageProducer producer = session.createProducer(destQ);
 		
-		// set a queue listener
-		consumer.setMessageListener(new MessageListener() {
+		for (int i = 0; i < 100; i++) {
+			// create a message
+			Message msg = session.createTextMessage("<msg><id>"+i+"</id></msg>");
 
-			// on message received, this method will execute
-			@Override
-			public void onMessage(Message message) {
-				// cast from message to text and print
-				TextMessage txtmsg = (TextMessage) message;
-				try {
-					System.out.println("Msg received: " + txtmsg.getText());
-				} catch (JMSException e) {
-					e.printStackTrace();
-				}
-			}
-		});
-		System.out.println("Connected to ActiveMQ!");
-		
-		// use this scanner to stop the runtime here
-		System.out.println("Press enter to stop...");
-		new Scanner(System.in).nextLine();
-		System.out.println("Stopping the Message consumer...");
+			//send the message
+			System.out.println("Sending message..."+i);
+			producer.send(msg);			
+		}
 		
 		// close the open objects
 		session.close();
 		con.close();    
 		context.close();
+		System.out.println("End of TestProducer...");
 	}
 
 }

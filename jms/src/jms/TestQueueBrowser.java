@@ -1,14 +1,13 @@
 package jms;
 
-import java.util.Scanner;
+import java.util.Enumeration;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
 import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageConsumer;
-import javax.jms.MessageListener;
+import javax.jms.Queue;
+import javax.jms.QueueBrowser;
 import javax.jms.Session;
 import javax.jms.TextMessage;
 import javax.naming.InitialContext;
@@ -18,7 +17,7 @@ import javax.naming.NamingException;
  * This class will connect to ActiveMQ and consume a destination named fila.financeiro
  * 
  */
-public class TestConsumer {
+public class TestQueueBrowser {
 
 	public static void main(String[] args) throws NamingException, JMSException {
 		
@@ -38,32 +37,16 @@ public class TestConsumer {
 		Session session = con.createSession(false, Session.AUTO_ACKNOWLEDGE);
 		
 		// destination is where the messages are. the jndi name is defined in the jndi.properties
-		Destination fila = (Destination) context.lookup("financeiro");
+		Destination destQ = (Destination) context.lookup("financeiro");
 		
-		// consumer to get the message from the queue
-		MessageConsumer consumer = session.createConsumer(fila);
+		// queue browser will look at the messages without removing them from the queue
+		QueueBrowser browser = session.createBrowser((Queue) destQ);
 		
-		// set a queue listener
-		consumer.setMessageListener(new MessageListener() {
-
-			// on message received, this method will execute
-			@Override
-			public void onMessage(Message message) {
-				// cast from message to text and print
-				TextMessage txtmsg = (TextMessage) message;
-				try {
-					System.out.println("Msg received: " + txtmsg.getText());
-				} catch (JMSException e) {
-					e.printStackTrace();
-				}
-			}
-		});
-		System.out.println("Connected to ActiveMQ!");
-		
-		// use this scanner to stop the runtime here
-		System.out.println("Press enter to stop...");
-		new Scanner(System.in).nextLine();
-		System.out.println("Stopping the Message consumer...");
+		Enumeration msgs = browser.getEnumeration();
+		while (msgs.hasMoreElements()) { 
+		    TextMessage msg = (TextMessage) msgs.nextElement(); 
+		    System.out.println("Message: " + msg.getText()); 
+		}
 		
 		// close the open objects
 		session.close();
