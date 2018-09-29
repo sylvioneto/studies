@@ -12,7 +12,6 @@ import javax.jms.MessageConsumer;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.Session;
-import javax.jms.TextMessage;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
@@ -60,7 +59,18 @@ public class TestConsumerQ {
 				// cast from message to text and print
 				// TextMessage txtmsg = (TextMessage) message;
 
-				// get object message
+				// parse xml to object
+				/*
+				 * try { TextMessage txtmsg = (TextMessage) message; Unmarshaller unmarshaller =
+				 * JAXBContext.newInstance(FundTransfer.class).createUnmarshaller();
+				 * StringReader reader = new StringReader(txtmsg.getText()); FundTransfer ft =
+				 * (FundTransfer) unmarshaller.unmarshal(reader);
+				 * System.out.println("Received xml: "+txtmsg.getText());
+				 * System.out.println("Received obj: "+ft.toString()); session.commit(); } catch
+				 * (JMSException | JAXBException e) { e.printStackTrace(); }
+				 */
+
+				// parse ObjectMessage to a model object
 				ObjectMessage objMsg = (ObjectMessage) message;
 				try {
 					FundTransfer ft = (FundTransfer) objMsg.getObject();
@@ -79,6 +89,7 @@ public class TestConsumerQ {
 				} catch (JMSException e) {
 					e.printStackTrace();
 				}
+
 			}
 		});
 		System.out.println("Connected to ActiveMQ!");
