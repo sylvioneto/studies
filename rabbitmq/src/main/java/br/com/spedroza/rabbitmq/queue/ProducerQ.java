@@ -4,7 +4,7 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 
-public class ProducerRabbitMQ {
+public class ProducerQ {
 
 	private final static String QUEUE_NAME = "test.incoming";
 
@@ -31,7 +31,7 @@ public class ProducerRabbitMQ {
 			}
 
 		} catch (Exception e) {
-			System.out.println("ProducerRabbitMQ exception: " + e.getMessage());
+			System.out.println("ProducerQ exception: " + e.getMessage());
 		}
 	}
 }

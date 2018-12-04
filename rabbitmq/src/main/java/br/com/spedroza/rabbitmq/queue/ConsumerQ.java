@@ -5,7 +5,7 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
 
-public class ConsumerRabbitMQ {
+public class ConsumerQ {
 
 	private final static String QUEUE_NAME = "test.incoming";
 
