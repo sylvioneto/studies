@@ -7,13 +7,19 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<description>Studying rabbit mq</description>
 
-	<!-- https://mvnrepository.com/artifact/com.rabbitmq/amqp-client -->
 	<dependencies>
 		<dependency>
 			<groupId>com.rabbitmq</groupId>
 			<artifactId>amqp-client</artifactId>
 			<version>5.5.1</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20180813</version>
+		</dependency>
+
 	</dependencies>
 
 
